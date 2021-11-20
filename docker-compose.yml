@@ -12,6 +12,14 @@ services:
       - MYSQL_DATABASE=petclinic
     volumes:
       - "./conf.d:/etc/mysql/conf.d:ro"
-    
-
-  
+  webapp:
+    image: gradle
+    command: ["gradle", "bootRun"]
+    volumes:
+      - "./:/home/gradle/project"
+    user: gradle
+    working_dir: /home/gradle/project
+    environment:
+      - DBHOST=mysql
+    ports:
+      - "8080:8080"
