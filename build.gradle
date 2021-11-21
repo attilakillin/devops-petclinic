@@ -1,78 +1,34 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.7'
     id 'java'
-}
-
-apply plugin: 'io.spring.dependency-management'
-
-jar {
-    baseName = 'my-petclinic-project'
-    version =  '0.0.1-SNAPSHOT'
+    id 'org.springframework.boot' version '2.5.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 repositories {
-    mavenCentral() 
-}
-
-java {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    mavenCentral()
 }
 
 dependencies {
-    implementation('org.springframework.boot:spring-boot-starter-actuator')
-    implementation('org.springframework.boot:spring-boot-starter-cache')
-    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
-	implementation('org.springframework.boot:spring-boot-starter-web')
-    implementation('org.springframework.boot:spring-boot-starter-validation')
-    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'javax.cache:cache-api'
+    implementation 'org.ehcache:ehcache'
+    implementation 'org.mockito:mockito-core'
+    implementation 'org.webjars:webjars-locator-core'
+    implementation 'org.webjars:jquery:2.2.4'
+    implementation 'org.webjars:jquery-ui:1.11.4'
+    implementation 'org.webjars:bootstrap:3.3.6'
 
-    implementation('javax.cache:cache-api')
-    implementation('org.ehcache:ehcache')
-    
-    implementation('org.webjars:webjars-locator-core')
-    implementation('org.webjars:jquery') {
-        version {
-            prefer '2.2.4'
-        }
-    }
-    implementation('org.webjars:jquery-ui') {
-        version {
-            prefer '1.11.4'
-        }
-    }
-    implementation('org.webjars:bootstrap') {
-        version {
-            prefer '3.3.6'
-        }
-    }
-    implementation('org.springframework.boot:spring-boot-devtools') // optional
+    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'com.h2database:h2'
 
-    implementation('com.puppycrawl.tools:checkstyle') {
-        version {
-            prefer '8.32'
-        }
-    }
-    implementation('io.spring.nohttp:nohttp-checkstyle') { // executions
-        version {
-            prefer '0.0.4.RELEASE'
-        }
-    }
-
-    implementation('org.mockito:mockito-core')
-
-    runtimeOnly('com.h2database:h2')
-    runtimeOnly('mysql:mysql-connector-java')
-
-    implementation('mysql:mysql-connector-java')
-
-    testImplementation('org.junit.jupiter:junit-jupiter-api')
-    testImplementation('org.assertj:assertj-core')
-
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.assertj:assertj-core'
 }
 
 test {
