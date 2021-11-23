@@ -1,7 +1,8 @@
 name: "Build and publish application to GitHub Packages"
 
 on:
-  push: [ master, dev ]
+  push:
+    branches: [ master, dev ]
   workflow_dispatch:
 
 env:
