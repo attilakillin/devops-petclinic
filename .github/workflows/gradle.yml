@@ -1,4 +1,4 @@
-name: "Build application with Gradle"
+name: "Test application with Gradle"
 
 on:
   push:
