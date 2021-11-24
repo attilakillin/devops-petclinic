@@ -1,0 +1,51 @@
+name: "Build and publish application to GitHub Packages"
+
+on:
+  push:
+    branches: [ master, dev ]
+  workflow_dispatch:
+
+env:
+  PETCLINIC_ROOT: petclinic
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        working-directory: ${{ env.PETCLINIC_ROOT }}
+        run: chmod +x gradlew
+      - name: Build and package application with Gradle
+        working-directory: ${{ env.PETCLINIC_ROOT }}
+        run: ./gradlew bootJar
+
+      - name: Log in to the Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract container metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Build and publish Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ env.PETCLINIC_ROOT }}
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          labels: ${{ steps.meta.outputs.labels }}
