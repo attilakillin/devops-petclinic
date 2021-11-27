@@ -19,9 +19,11 @@ docker build -f docker/Dockerfile.mysql -t database .
 docker build -f docker/Dockerfile.petclinic --build-arg container_tag=stable -t stable .
 docker build -f docker/Dockerfile.petclinic --build-arg container_tag=$1 -t latest .
 docker build -f docker/Dockerfile.web -t haproxy .
+docker build -f docker/Dockerfile.prom -t prometheus .
 
 # Start containers
 docker run --net internal --ip 172.16.0.2 -d --name database --env=$mysql_root_password --env=$mysql_user --env=$mysql_password --env=$mysql_database database
 docker run --net internal --ip 172.16.0.3 -d --name stable --env=$spring_profile --env=$mysql_url stable
 docker run --net internal --ip 172.16.0.4 -d --name latest --env=$spring_profile --env=$mysql_url latest
 docker run --net internal --ip 172.16.0.5 -d -p 8080:8080 -p 8404:8404 --name haproxy haproxy
+docker run --net internal --ip 172.16.0.6 -d -p 9090:9090 --name prometheus prometheus
