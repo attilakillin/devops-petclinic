@@ -27,3 +27,4 @@ docker run --net internal --ip 172.16.0.3 -d --name stable --env=$spring_profile
 docker run --net internal --ip 172.16.0.4 -d --name latest --env=$spring_profile --env=$mysql_url latest
 docker run --net internal --ip 172.16.0.5 -d -p 8080:8080 -p 8404:8404 --name haproxy haproxy
 docker run --net internal --ip 172.16.0.6 -d -p 9090:9090 --name prometheus prometheus
+docker run --net internal --ip 172.16.0.7 -d -p 3000:3000 --name grafana --user $(id -u) --volume "$PWD/grafana:/var/lib/grafana" grafana/grafana
