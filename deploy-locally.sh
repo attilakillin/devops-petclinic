@@ -16,10 +16,10 @@ docker network rm internal
 # Create network and build images
 docker network create --subnet=172.16.0.0/16 internal
 docker build -f docker/Dockerfile.mysql -t database .
-docker build -f docker/Dockerfile.petclinic --build-arg container_tag=stable -t stable .
+docker build -f docker/Dockerfile.petclinic --build-arg container_tag=stable --pull -t stable .
 docker build -f docker/Dockerfile.petclinic --build-arg container_tag=$1 -t latest .
 docker build -f docker/Dockerfile.web -t haproxy .
-docker build -f docker/Dockerfile.prom -t prometheus .
+docker build -f docker/Dockerfile.prometheus -t prometheus .
 
 # Start containers
 docker run --net internal --ip 172.16.0.2 -d --name database --env=$mysql_root_password --env=$mysql_user --env=$mysql_password --env=$mysql_database database
