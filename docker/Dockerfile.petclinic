@@ -1,0 +1,3 @@
+ARG container_tag=stable
+FROM ghcr.io/attilakillin/devops-petclinic:${container_tag}
+EXPOSE 8080
