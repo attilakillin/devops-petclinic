@@ -12,4 +12,4 @@ jobs:
   publish-latest:
     uses: attilakillin/devops-petclinic/.github/workflows/publish-base.yml@master
     with:
-      container_tag: ${{ inputs.tag }}
+      container_tag: ${{ github.event.inputs.tag }}
