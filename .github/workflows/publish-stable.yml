@@ -1,0 +1,15 @@
+name: "Publish stable version on GitHub Packages"
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        description: Customize the tag of the published image
+        default: stable
+
+jobs:
+  publish-latest:
+    uses: attilakillin/devops-petclinic/.github/workflows/publish-base.yml
+    with:
+      container_tag: ${{ inputs.tag }}

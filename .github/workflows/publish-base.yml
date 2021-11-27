@@ -1,12 +1,16 @@
-name: "Build and publish application to GitHub Packages"
+name: "Publish application using the given parameters"
 
 on:
-  push:
-    branches: [ master, dev ]
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      container_tag:
+        required: true
+        type: string
+      petclinic_root:
+        type: string
+        default: petclinic
 
 env:
-  PETCLINIC_ROOT: petclinic
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
@@ -24,10 +28,10 @@ jobs:
           distribution: 'adopt'
           cache: gradle
       - name: Grant execute permission for gradlew
-        working-directory: ${{ env.PETCLINIC_ROOT }}
+        working-directory: ${{ inputs.petclinic_root }}
         run: chmod +x gradlew
       - name: Build and package application with Gradle
-        working-directory: ${{ env.PETCLINIC_ROOT }}
+        working-directory: ${{ inputs.petclinic_root }}
         run: ./gradlew bootJar
 
       - name: Log in to the Container Registry
@@ -44,7 +48,7 @@ jobs:
       - name: Build and publish Docker image
         uses: docker/build-push-action@v2
         with:
-          context: ${{ env.PETCLINIC_ROOT }}
+          context: ${{ inputs.petclinic_root }}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.container_tag }}
           labels: ${{ steps.meta.outputs.labels }}

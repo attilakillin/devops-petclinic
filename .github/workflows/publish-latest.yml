@@ -1,0 +1,12 @@
+name: "Publish application to GitHub Packages"
+
+on:
+  push:
+    branches: [ master, dev ]
+  workflow_dispatch:
+
+jobs:
+  publish-latest:
+    uses: attilakillin/devops-petclinic/.github/workflows/publish-base.yml
+    with:
+      container_tag: ${{ github.sha }}
